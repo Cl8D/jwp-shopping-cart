@@ -1,7 +1,10 @@
 package cart.common.auth;
 
+import cart.domain.MemberPassword;
 import cart.domain.MemberRole;
+import cart.exception.ErrorCode;
 import cart.exception.ForbiddenException;
+import cart.exception.GlobalException;
 import cart.service.MemberService;
 import cart.service.dto.MemberResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -28,11 +31,23 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
         final String memberToken = BasicTokenProvider.extractToken(authorization);
         final String memberEmail = memberToken.split(DELIMITER)[0];
         final String memberPassword = memberToken.split(DELIMITER)[1];
-        final MemberResponse memberResponse = memberService.getByEmailAndPassword(memberEmail, memberPassword);
-        boolean isAdmin = MemberRole.isAdmin(memberResponse.getRole());
+        final MemberResponse memberResponse = memberService.getByEmail(memberEmail);
+        validatePassword(memberPassword, memberResponse.getPassword());
+        validateAdminUser(memberResponse.getRole());
+        return true;
+    }
+
+    private void validatePassword(final String requestPassword, final String savedPassword) {
+        final String decodedPassword = MemberPassword.decodePassword(requestPassword);
+        if (!savedPassword.equals(decodedPassword)) {
+            throw new GlobalException(ErrorCode.MEMBER_PASSWORD_INVALID);
+        }
+    }
+
+    private void validateAdminUser(final String role) {
+        boolean isAdmin = MemberRole.isAdmin(role);
         if (!isAdmin) {
             throw new ForbiddenException();
         }
-        return true;
     }
 }

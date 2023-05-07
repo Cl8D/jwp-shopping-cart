@@ -14,6 +14,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND("사용자 정보를 찾을 수 없습니다."),
     MEMBER_INVALID_ROLE("유효하지 않은 멤버 권한 정보입니다."),
     MEMBER_DUPLICATE_EMAIL("이미 등록된 사용자 이메일입니다."),
+    MEMBER_PASSWORD_INVALID("비밀번호가 일치하지 않습니다"),
     CART_NOT_FOUND("장바구니 정보를 찾을 수 없습니다"),
     CART_INVALID_DELETE("장바구니 정보 삭제 중 예기치 못한 오류가 발생하였습니다."),
     UNAUTHORIZED("인증되지 않은 사용자입니다."),

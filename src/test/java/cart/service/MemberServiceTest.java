@@ -98,15 +98,15 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 사용자 이메일과 비밀번호가 주어지면, 사용자 정보를 반환한다.")
-    void getByEmailAndPassword_success() {
+    @DisplayName("유효한 사용자 이메일이 주어지면, 사용자 정보를 반환한다.")
+    void getByEmail_success() {
         // given
         final MemberEntity memberEntity = new MemberEntity("journey@gmail.com", "USER",
             "cGFzc3dvcmQ=", "져니", "010-1234-5678");
-        when(memberDao.findByEmailAndPassword(any(), any())).thenReturn(Optional.of(memberEntity));
+        when(memberDao.findByEmail(any())).thenReturn(Optional.of(memberEntity));
 
         // when
-        final MemberResponse memberResponse = memberService.getByEmailAndPassword("journey@gmail.com", "cGFzc3dvcmQ=");
+        final MemberResponse memberResponse = memberService.getByEmail("journey@gmail.com");
 
         // then
         assertThat(memberResponse)
@@ -115,9 +115,9 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효하지 않은 사용자 이메일과 비밀번호가 주어지면, 예외가 발생한다.")
-    void getByEmailAndPassword_invalid_fail() {
-        assertThatThrownBy(() -> memberService.getByEmailAndPassword("journey@gmail.com", "cGFzc3dvcmQ="))
+    @DisplayName("유효하지 않은 사용자 이메일이 주어지면, 예외가 발생한다.")
+    void getByEmail_invalid_fail() {
+        assertThatThrownBy(() -> memberService.getByEmail("journey@gmail.com"))
             .isInstanceOf(GlobalException.class)
             .extracting("errorCode")
             .isEqualTo(ErrorCode.MEMBER_NOT_FOUND);

@@ -38,8 +38,8 @@ public class MemberService {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    public MemberResponse getByEmailAndPassword(final String email, String password) {
-        return memberDao.findByEmailAndPassword(email, password)
+    public MemberResponse getByEmail(final String email) {
+        return memberDao.findByEmail(email)
             .map(this::convertToDto)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
     }
